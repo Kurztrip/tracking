@@ -16,12 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.schemas import get_schema_view
 
-from core.views import OrderList
+from core.views import PackageList, PackageState, RouteDetail, PackageEstimatedTime
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/token', obtain_auth_token, name='obtain_token'),
-    path('orders/', OrderList.as_view(), name='order_list')
+    path('packages/', PackageList.as_view(), name='order_list'),
+    path('packages/<int:pk>/state', PackageState.as_view(), name='order_state'),
+    path('packages/<int:pk>/eta', PackageEstimatedTime.as_view(), name='order_eta'),
+    path('routes/<int:pk>', RouteDetail.as_view(), name='route'),
+    path('schema', get_schema_view(
+        title="Kurztrip Tracking API",
+        description="Tracking Micro Service for the Kurztrip App"
+    ), name='schema_view'),
 ]

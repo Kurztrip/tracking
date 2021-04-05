@@ -1,0 +1,43 @@
+version: '3.7'
+
+x-service-volumes: &service-volumes
+  - ./:/code:rw,cached
+
+x-database-variables: &database-variables
+  POSTGRES_DB: tracking
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: user
+
+x-app-variables: &app-variables
+  <<: *database-variables
+  POSTGRES_HOST: postgres
+
+services:
+  website:
+    image: tracking
+    command: python /code/manage.py runserver 0:8000
+    volumes: *service-volumes
+    environment: *app-variables
+    depends_on:
+      - db_migrate
+    ports:
+      - "8000:8000"
+
+  db_migrate:
+    image: tracking
+    command: sh -c "python /code/manage.py makemigrations && python /code/manage.py migrate"
+    volumes: *service-volumes
+    environment: *app-variables
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment: *database-variables
+    volumes:
+      - db-data:/var/lib/postgresql/13/main
+
+volumes:
+  db-data:

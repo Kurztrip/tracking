@@ -1,21 +1,15 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-
-from rest_framework import mixins
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
+from rest_framework import mixins
+import requests
 
-from .serializers import OrderSerializer
-from .models import Order
+from .models import Package, Route
+from .serializers import PackageStateSerializer, PackageSerializer, PackageEstimatedTimeSerializer, RouteSerializer
 
-
-class OrderList(mixins.CreateModelMixin,
-                mixins.ListModelMixin,
-                generics.GenericAPIView):
-    serializer_class = OrderSerializer
-    queryset = Order.objects.all()
+class PackageList(mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  generics.GenericAPIView):
+    serializer_class = PackageSerializer
+    queryset = Package.objects.all()
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -23,18 +17,41 @@ class OrderList(mixins.CreateModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-# class OrderList(APIView):
-#
-#     permission_classes = (IsAuthenticated, )
-#
-#     def get(self, request, *args, **kwargs):
-#         qs = Order.objects.all()
-#         serializer = OrderSerializer(qs, many=True)
-#         return Response(serializer.data)  # safe = False
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = OrderSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.data, status=400)
+
+class PackageState(mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   generics.GenericAPIView):
+    serializer_class = PackageStateSerializer
+    queryset = Package.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class PackageEstimatedTime(mixins.RetrieveModelMixin,
+                           generics.GenericAPIView):
+    serializer_class = PackageEstimatedTimeSerializer
+    queryset = Package.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class RouteDetail(mixins.CreateModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  generics.GenericAPIView):
+    serializer_class = RouteSerializer
+    queryset = Route.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
