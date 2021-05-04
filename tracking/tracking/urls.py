@@ -17,16 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 # from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.schemas import get_schema_view
+from rest_framework.urlpatterns import format_suffix_patterns
 
-from core.views import PackageList, PackageState, RouteDetail, PackageEstimatedTime
+from core.views import PackageList, PackageState, RouteDetail, PackageDetail, PackageETA, RouteList
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     # path('api-auth/', include('rest_framework.urls')),
     # path('api/token', obtain_auth_token, name='obtain_token'),
-    path('packages/', PackageList.as_view(), name='order_list'),
-    path('packages/<int:pk>/state', PackageState.as_view(), name='order_state'),
-    path('packages/<int:pk>/eta', PackageEstimatedTime.as_view(), name='order_eta'),
+    path('packages/', PackageList.as_view(), name='package_list'),
+    path('packages/<int:pk>/state', PackageState.as_view(), name='package_state'),
+    path('packages/<int:pk>/eta', PackageETA.as_view(), name='package_eta'),
+    path('packages/<int:pk>', PackageDetail.as_view(), name='package'),
+    path('routes/', RouteList.as_view(), name='route_list'),
     path('routes/<int:pk>', RouteDetail.as_view(), name='route'),
     path('schema', get_schema_view(
         title="Kurztrip Tracking API",

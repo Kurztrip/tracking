@@ -7,12 +7,11 @@ class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
         fields = [
-            'id', 'truck_id', 'volume', 'receiver', 'destination_long', 'destination_lat', 'sender',
-            'state', 'estimated_time'
+            'id', 'truck_id', 'state', 'estimated_time'
         ]
 
 
-class PackageStateSerializer(serializers.ModelSerializer):
+class PackageIdStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
         fields = [
@@ -20,7 +19,15 @@ class PackageStateSerializer(serializers.ModelSerializer):
         ]
 
 
-class PackageEstimatedTimeSerializer(serializers.ModelSerializer):
+class PackageStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Package
+        fields = [
+            'state'
+        ]
+
+
+class PackageIdETASerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
         fields = [
@@ -28,9 +35,25 @@ class PackageEstimatedTimeSerializer(serializers.ModelSerializer):
         ]
 
 
+class PackageETASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Package
+        fields = [
+            'estimated_time'
+        ]
+
+
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
         fields = [
-            'truck_id', 'p_longitudes', 'p_latitudes', 'driver_long', 'driver_lat'
+            'starting_time', 'p_longitudes', 'p_latitudes'
+        ]
+
+
+class RouteIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Route
+        fields = [
+            'truck_id', 'starting_time', 'p_longitudes', 'p_latitudes'
         ]

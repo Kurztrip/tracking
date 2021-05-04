@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,29 @@ SECRET_KEY = '41)hp_+4e$vbl*mq2!j07*32tb!#r(-*06if3eder#-#!avg&6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'localhost:8000', '127.0.0.1']
 
+EC2_PRIVATE_IP = None
+try:
+    EC2_PRIVATE_IP = requests.get(
+        'http://169.254.169.254/latest/meta-data/public-hostname',
+        timeout=0.01).text
+except requests.exceptions.RequestException:
+    pass
+
+if EC2_PRIVATE_IP:
+    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
+
+EC2_PRIVATE_IP = None
+try:
+    EC2_PRIVATE_IP = requests.get(
+        'http://169.254.169.254/latest/meta-data/public-ipv4',
+        timeout=0.01).text
+except requests.exceptions.RequestException:
+    pass
+
+if EC2_PRIVATE_IP:
+    ALLOWED_HOSTS.append(str(EC2_PRIVATE_IP))
 
 # Application definition
 
