@@ -19,7 +19,8 @@ from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from core.views import PackageList, PackageState, RouteDetail, PackageDetail, PackageETA, RouteList
+from core.views import PackageList, PackageState, RouteDetail, PackageDetail,\
+    PackageETA, RouteList, DriverRouteLinkDetail, DriverRouteLinkList
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('packages/<int:pk>', PackageDetail.as_view(), name='package'),
     path('routes/', RouteList.as_view(), name='route_list'),
     path('routes/<int:pk>', RouteDetail.as_view(), name='route'),
+    path('links/', DriverRouteLinkList.as_view(), name='link_list'),
+    path('links/<int:pk>', DriverRouteLinkDetail.as_view(), name='link_detail'),
     path('schema', get_schema_view(
         title="Kurztrip Tracking API",
         description="Tracking Micro Service for the Kurztrip App"

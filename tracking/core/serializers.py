@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Package, Route
+from .models import Package, Route, DriverRouteLink
 
 
 class PackageSerializer(serializers.ModelSerializer):
@@ -56,4 +56,12 @@ class RouteIdSerializer(serializers.ModelSerializer):
         model = Route
         fields = [
             'truck_id', 'starting_time', 'p_longitudes', 'p_latitudes'
+        ]
+
+
+class DriverRouteLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverRouteLink
+        fields = [
+            'driver_id', 'route_id'
         ]

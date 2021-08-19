@@ -2,9 +2,10 @@ from rest_framework import generics
 from rest_framework import mixins
 import requests
 
-from .models import Package, Route
+from .models import Package, Route, DriverRouteLink
 from .serializers import PackageStateSerializer, PackageSerializer, RouteSerializer, \
-    PackageIdStateSerializer, PackageETASerializer, PackageIdETASerializer, RouteIdSerializer
+    PackageIdStateSerializer, PackageETASerializer, PackageIdETASerializer, RouteIdSerializer, \
+    DriverRouteLinkSerializer
 
 
 class PackageList(mixins.CreateModelMixin,
@@ -98,3 +99,33 @@ class RouteDetail(mixins.UpdateModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class DriverRouteLinkDetail(mixins.UpdateModelMixin,
+                            mixins.RetrieveModelMixin,
+                            mixins.DestroyModelMixin,
+                            generics.GenericAPIView):
+    serializer_class = DriverRouteLinkSerializer
+    queryset = DriverRouteLink.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class DriverRouteLinkList(mixins.CreateModelMixin,
+                          mixins.ListModelMixin,
+                          generics.GenericAPIView):
+    serializer_class = DriverRouteLinkSerializer
+    queryset = DriverRouteLink.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

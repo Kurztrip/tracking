@@ -23,3 +23,11 @@ class Package(models.Model):
 
     def __str__(self):
         return str(str(self.id) + ' ' + self.state)
+
+
+class DriverRouteLink(models.Model):
+    driver_id = models.IntegerField(primary_key=True)
+    route_id = models.OneToOneField(Route, on_delete=models.CASCADE, related_name='link_route')
+
+    def __str__(self):
+        return str(str(self.id) + ' ' + str(self.route_id))
