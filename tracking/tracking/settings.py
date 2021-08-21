@@ -26,7 +26,8 @@ SECRET_KEY = '41)hp_+4e$vbl*mq2!j07*32tb!#r(-*06if3eder#-#!avg&6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'localhost:8000', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', 'localhost:8000', '127.0.0.1',
+                 'tracking.apps.svc.cluster.local:8000', 'tracking.apps.svc.cluster.local']
 
 EC2_PRIVATE_IP = None
 try:
