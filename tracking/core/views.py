@@ -1,11 +1,13 @@
 from rest_framework import generics
 from rest_framework import mixins
-import requests
+from rest_framework import views
+from rest_framework import response
 
 from .models import Package, Route, DriverRouteLink
 from .serializers import PackageStateSerializer, PackageSerializer, RouteSerializer, \
     PackageIdStateSerializer, PackageETASerializer, PackageIdETASerializer, RouteIdSerializer, \
     DriverRouteLinkSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class PackageList(mixins.CreateModelMixin,
@@ -124,8 +126,22 @@ class DriverRouteLinkList(mixins.CreateModelMixin,
     serializer_class = DriverRouteLinkSerializer
     queryset = DriverRouteLink.objects.all()
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['driver_id', 'route_id']
+
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class NotAssignedRoutes(views.APIView):
+    serializer_class = RouteSerializer
+
+    def get(self, request):
+        assigned_routes = [route.route_id for route in DriverRouteLink.objects.all()]
+        print(assigned_routes)
+        trucks = [route.truck_id for route in Route.objects.all() if
+                  route not in assigned_routes]
+        return response.Response(trucks)

@@ -20,7 +20,7 @@ from rest_framework.schemas import get_schema_view
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from core.views import PackageList, PackageState, RouteDetail, PackageDetail,\
-    PackageETA, RouteList, DriverRouteLinkDetail, DriverRouteLinkList
+    PackageETA, RouteList, DriverRouteLinkDetail, DriverRouteLinkList, NotAssignedRoutes
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('routes/<int:pk>', RouteDetail.as_view(), name='route'),
     path('links/', DriverRouteLinkList.as_view(), name='link_list'),
     path('links/<int:pk>', DriverRouteLinkDetail.as_view(), name='link_detail'),
+    path('free_routes/', NotAssignedRoutes.as_view(), name='free_routes'),
     path('schema', get_schema_view(
         title="Kurztrip Tracking API",
         description="Tracking Micro Service for the Kurztrip App"
