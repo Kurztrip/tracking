@@ -33,7 +33,7 @@ urlpatterns = [
     path('routes/', RouteList.as_view(), name='route_list'),
     path('routes/<int:pk>', RouteDetail.as_view(), name='route'),
     path('links/', DriverRouteLinkList.as_view(), name='link_list'),
-    path('links/<int:pk>', DriverRouteLinkDetail.as_view(), name='link_detail'),
+    path('links/<str:pk>', DriverRouteLinkDetail.as_view(), name='link_detail'),
     path('free_routes/', NotAssignedRoutes.as_view(), name='free_routes'),
     path('schema', get_schema_view(
         title="Kurztrip Tracking API",
