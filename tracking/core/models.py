@@ -26,8 +26,8 @@ class Package(models.Model):
 
 
 class DriverRouteLink(models.Model):
-    driver_id = models.IntegerField(primary_key=True)
+    driver_id = models.CharField(primary_key=True, max_length=64)
     route_id = models.OneToOneField(Route, on_delete=models.CASCADE, related_name='link_route')
 
     def __str__(self):
-        return str(str(self.id) + ' ' + str(self.route_id))
+        return str(self.driver_id + ' ' + str(self.route_id))
